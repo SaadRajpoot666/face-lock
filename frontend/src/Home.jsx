@@ -14,6 +14,16 @@ export const Home = () => {
             Hmm... You look around <span className="text-blue-400 font-semibold">{user.age}</span> years old 😉
           </p>
         )}
+        {user?.gender && (
+          <p className="text-lg text-gray-300 mb-4">
+            Gender:<span className="text-blue-400 font-semibold">{user.gender}</span> 
+          </p>
+        )}
+        {user?.emotion && (
+          <p className="text-lg text-gray-300 mb-4">
+            Emotion:<span className="text-blue-400 font-semibold">{user.emotion}</span>
+          </p>
+        )}
         <button
           onClick={logout}
           className="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
