@@ -4,9 +4,8 @@ import { Camera } from "@mediapipe/camera_utils";
 import { FACEMESH_LEFT_EYE, FACEMESH_RIGHT_EYE } from "@mediapipe/face_mesh";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./context/UserContext";
 
-export const SignUp = () => {
+export const Cam = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [name, setName] = useState("");
@@ -14,7 +13,6 @@ export const SignUp = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   useEffect(() => {
     const faceMesh = new FaceMesh({
@@ -96,8 +94,8 @@ const onResults = (results) => {
       try {
         const res = await axios.post("http://127.0.0.1:8000/signup", formData);
         setMessage(res.data.message);
-        login({ name });
-        navigate("/login");
+        login({ name,age,gender,emotion });
+        navigate("/");
       } catch (err) {
         console.error(err);
         setMessage("Signup failed. No face found.");

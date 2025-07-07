@@ -56,10 +56,27 @@ def signup_face(request):
             # Save modified image
             drawn_path = os.path.splitext(image_path)[0] + "_landmarks.jpg"
             cv2.imwrite(drawn_path, image_bgr)
+            try:
+                deepface_result = DeepFace.analyze(img_path=image_path, actions=["age", "gender", "emotion"], enforce_detection=False)
+                analyze = {
+                    "age": deepface_result[0]["age"],
+                    "gender": deepface_result[0]["gender"],
+                    "emotion": deepface_result[0]["dominant_emotion"]
+                }
+            except Exception as e:
+                analyze = {
+                    "age": "Estimation Failed",
+                    "gender": "Estimation Failed",
+                    "emotion": "Estimation Failed"
+                }
 
             return Response({
                 "message": "Signup successful with face landmarks drawn.",
-                "image_url": request.build_absolute_uri(f'/media/faces/{os.path.basename(drawn_path)}')
+                "image_url": request.build_absolute_uri(f'/media/faces/{os.path.basename(drawn_path)}'),
+                "age": analyze["age"],
+                "gender": analyze["gender"],
+                "emotion": analyze["emotion"]
             }, status=status.HTTP_201_CREATED)
+
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
